@@ -52,4 +52,24 @@ public class book {
     public int getAvailable_copies() {
         return available_copies;
     }
+
+    public int getBook_id() {
+        return book_id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public Date getPublished_date() {
+        return published_date;
+    }
 }
