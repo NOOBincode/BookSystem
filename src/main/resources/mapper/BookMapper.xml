@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.micro.BookSystem.dao.book.BookMapper">
+
+    <!-- 插入书籍 -->
+    <insert id="insertBook" parameterType="com.micro.BookSystem.entity.book.book">
+        INSERT INTO book (title, author, isbn, published_date, available_copies)
+        VALUES (#{title}, #{author}, #{isbn}, #{published_date}, #{available_copies})
+    </insert>
+
+    <!-- 删除书籍 -->
+    <delete id="deleteBook" parameterType="int">
+        DELETE FROM book WHERE book_id = #{book_id}
+    </delete>
+
+    <!-- 根据书籍ID查询书籍 -->
+    <select id="selectBookById" parameterType="int" resultType="com.micro.BookSystem.entity.book.book">
+        SELECT book_id, title, author, isbn, published_date, available_copies, created_at
+        FROM book
+        WHERE book_id = #{book_id}
+    </select>
+
+    <!-- 根据书名查询书籍 -->
+    <select id="selectBookByTitle" parameterType="string" resultType="com.micro.BookSystem.entity.book.book">
+        SELECT book_id, title, author, isbn, published_date, available_copies, created_at
+        FROM book
+        WHERE title = #{book_name}
+    </select>
+
+    <!-- 更新书籍 -->
+    <update id="updateBook" parameterType="com.micro.BookSystem.entity.book.book">
+        UPDATE book
+        SET title = #{title},
+            author = #{author},
+            isbn = #{isbn},
+            published_date = #{published_date},
+            available_copies = #{available_copies}
+        WHERE book_id = #{book_id}
+    </update>
+
+    <!-- 获取书籍列表 -->
+    <select id="checkBookList" resultType="com.micro.BookSystem.entity.book.book">
+        SELECT book_id, title, author, isbn, published_date, available_copies, created_at
+        FROM book
+    </select>
+
+    <!-- 根据条件查询书籍 -->
+    <select id="selectBooksByConditions" parameterType="map" resultType="com.micro.BookSystem.entity.book.book">
+        SELECT book_id, title, author, isbn, published_date, available_copies, created_at
+        FROM book
+        WHERE 1=1
+        <if test="author != null and author != ''">
+            AND author = #{author}
+        </if>
+        <if test="publishDate != null and publishDate != ''">
+            AND published_date = #{publishDate}
+        </if>
+    </select>
+
+    <!-- 批量删除书籍 -->
+    <delete id="deleteBooksByIds" parameterType="list">
+        DELETE FROM book
+        WHERE book_id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 统计书籍数量 -->
+    <select id="countBooks" resultType="int">
+        SELECT COUNT(*) FROM book
+    </select>
+
+    <!-- 锁定书籍 -->
+    <update id="lockBookById" parameterType="int">
+        UPDATE book
+        SET available_copies = 0
+        WHERE book_id = #{bookId}
+    </update>
+
+</mapper>
